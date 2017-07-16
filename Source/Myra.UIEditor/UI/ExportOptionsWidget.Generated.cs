@@ -8,7 +8,6 @@ namespace Myra.UIEditor.UI
 	{
 		private void BuildUI()
 		{
-			
 			DrawLines = false;
 			DrawLinesColor = Color.White;
 			ColumnSpacing = 8;
@@ -49,8 +48,8 @@ namespace Myra.UIEditor.UI
 			Id = "Root";
 			XHint = 0;
 			YHint = 0;
-			WidthHint = null;
-			HeightHint = null;
+			WidthHint = 600;
+			HeightHint = 100;
 			PaddingLeft = 0;
 			PaddingRight = 0;
 			PaddingTop = 0;
