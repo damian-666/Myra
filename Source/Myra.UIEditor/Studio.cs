@@ -267,6 +267,14 @@ namespace Myra.UIEditor
 			saveAsItem.Selected += SaveAsItemOnClicked;
 
 			fileMenu.Items.Add(saveAsItem);
+			
+			var exportCSItem = new MenuItem
+			{
+				Text = "Export to C#..."
+			};
+			exportCSItem.Selected += ExportCsItemOnSelected;
+
+			fileMenu.Items.Add(exportCSItem);	
 			fileMenu.Items.Add(new MenuSeparator());
 
 			var quitItem = new MenuItem
@@ -634,6 +642,17 @@ namespace Myra.UIEditor
 			_desktop.Widgets.Add(_statisticsGrid);
 
 			UpdateEnabled();
+		}
+
+		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
+		{
+			using (var dlg = new FolderBrowserDialog())
+			{
+				if (dlg.ShowDialog() == DialogResult.OK)
+				{
+					
+				}
+			}
 		}
 
 		private void DeleteItemOnSelected(object sender, EventArgs eventArgs)
