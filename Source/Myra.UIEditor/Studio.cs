@@ -26,9 +26,10 @@ namespace Myra.UIEditor
 {
 	public class Studio : Game
 	{
-		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
 		private const string PathFilter = "Myra UIEditor Projects (*.ui)|*.ui";
+
+		private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+		private static Studio _instance;
 
 		private readonly GraphicsDeviceManager _graphicsDeviceManager;
 		private readonly State _state;
@@ -74,6 +75,14 @@ namespace Myra.UIEditor
 			_addMenuSeparatorItem,
 //			_addTreeNodeItem,
 			_deleteItem;
+
+		public static Studio Instance
+		{
+			get
+			{
+				return _instance;
+			}
+		}
 
 		public string FilePath
 		{
@@ -132,6 +141,8 @@ namespace Myra.UIEditor
 
 		public Studio()
 		{
+			_instance = this;
+
 			// Restore state
 			_state = State.Load();
 
@@ -646,13 +657,8 @@ namespace Myra.UIEditor
 
 		private void ExportCsItemOnSelected(object sender1, EventArgs eventArgs)
 		{
-			using (var dlg = new FolderBrowserDialog())
-			{
-				if (dlg.ShowDialog() == DialogResult.OK)
-				{
-					
-				}
-			}
+			var dlg = new ExportOptionsDialog();
+			dlg.ShowModal(_desktop);
 		}
 
 		private void DeleteItemOnSelected(object sender, EventArgs eventArgs)
