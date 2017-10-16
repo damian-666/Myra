@@ -215,7 +215,6 @@ namespace Myra.Graphics2D.UI
 				ContextMenu.Visible = true;
 
 				_widgets.Add(ContextMenu);
-				FocusedWidget = ContextMenu;
 			}
 		}
 
@@ -456,7 +455,8 @@ namespace Myra.Graphics2D.UI
 							IMenuItem menuItem;
 							if (_menuBarKeysToItems.TryGetValue(ch.Value, out menuItem))
 							{
-								MenuBar.Select(menuItem);
+								MenuBar.Click(menuItem);
+								FocusedWidget = MenuBar;
 							}
 						}
 					}

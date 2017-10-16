@@ -15,6 +15,7 @@ namespace Myra.Graphics2D.UI
 	public abstract class Menu : GridBased, IMenuItemsContainer
 	{
 		private ObservableCollection<IMenuItem> _items;
+		private int _activeItemsCount;
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -69,6 +70,20 @@ namespace Myra.Graphics2D.UI
 				}
 			}
 		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public int ActiveItemsCount
+		{
+			get
+			{
+				return _activeItemsCount;
+			}
+		}
+
+		[HiddenInEditor]
+		[JsonIgnore]
+		public abstract int? SelectedIndex { get; set; }
 
 		protected Menu(MenuStyle style)
 		{
@@ -145,6 +160,24 @@ namespace Myra.Graphics2D.UI
 					widget.GridPositionY = i;
 				}
 			}
+
+			UpdateItems();
+		}
+
+		private void UpdateItems()
+		{
+			_activeItemsCount = 0;
+			foreach (var item in Items)
+			{
+				var asMenuItem = item as MenuItem;
+				if (asMenuItem != null &&
+					asMenuItem.Widget != null &&
+					asMenuItem.Enabled &&
+					item.Widget is MenuItemButton)
+				{
+					++_activeItemsCount;
+				}
+			}
 		}
 
 		private void AddItem(Widget menuItem, int index)
@@ -199,6 +232,10 @@ namespace Myra.Graphics2D.UI
 
 				menuItemButton.Down += ButtonOnDown;
 				menuItemButton.Up += ButtonOnUp;
+				menuItemButton.EnabledChanged += (s, a) =>
+				{
+					UpdateItems();
+				};
 				menuItemButton.SubMenu.Items = menuItem.Items;
 				menuItemButton.Toggleable = menuItem.Items.Count > 0;
 
@@ -358,7 +395,7 @@ namespace Myra.Graphics2D.UI
 				if (menuItem != null && menuItem.SubMenu != null && menuItem.Bounds.Contains(position) &&
 					OpenMenuItem != menuItem)
 				{
-					Select((MenuItem)widget.Tag);
+					Click((MenuItem)widget.Tag);
 				}
 			}
 		}
@@ -383,7 +420,7 @@ namespace Myra.Graphics2D.UI
 				{
 					continue;
 				}
-				
+
 
 				if (button.UnderscoreChar == ch)
 				{
@@ -395,6 +432,23 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		public void Click(IMenuItem menuItem)
+		{
+			if (OpenMenuItem != null)
+			{
+				OpenMenuItem.IsPressed = false;
+			}
+
+			if (menuItem != null)
+			{
+				var asButton = menuItem.Widget as MenuItemButton;
+				if (asButton != null)
+				{
+					asButton.IsPressed = true;
+				}
+			}
+		}
+
 		public void Select(IMenuItem menuItem)
 		{
 			if (OpenMenuItem != null)
@@ -402,10 +456,20 @@ namespace Myra.Graphics2D.UI
 				OpenMenuItem.IsPressed = false;
 			}
 
-			var asButton = menuItem.Widget as MenuItemButton;
-			if (asButton != null)
+			if (menuItem != null)
 			{
-				asButton.IsPressed = true;
+				var asButton = menuItem.Widget as MenuItemButton;
+				if (asButton != null)
+				{
+					if (asButton.SubMenu == null || asButton.SubMenu.Items.Count == 0)
+					{
+						asButton.IsMouseOver = true;
+					}
+					else
+					{
+						asButton.IsPressed = true;
+					}
+				}
 			}
 		}
 

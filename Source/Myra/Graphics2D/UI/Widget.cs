@@ -46,6 +46,7 @@ namespace Myra.Graphics2D.UI
 		private int _paddingLeft, _paddingRight, _paddingTop, _paddingBottom;
 
 		private DateTime _lastDown;
+		private bool _enabled;
 
 		public static bool DrawFrames { get; set; }
 		public static bool DrawFocused { get; set; }
@@ -292,7 +293,29 @@ namespace Myra.Graphics2D.UI
 		}
 
 		[EditCategory("Behavior")]
-		public virtual bool Enabled { get; set; }
+		public virtual bool Enabled
+		{
+			get
+			{
+				return _enabled;
+			}
+
+			set
+			{
+				if (value == _enabled)
+				{
+					return;
+				}
+
+				_enabled = value;
+
+				var ev = EnabledChanged;
+				if (ev != null)
+				{
+					ev(this, EventArgs.Empty);
+				}
+			}
+		}
 
 		[EditCategory("Behavior")]
 		public bool Visible
@@ -371,7 +394,7 @@ namespace Myra.Graphics2D.UI
 
 		[HiddenInEditor]
 		[JsonIgnore]
-		public bool IsMouseOver { get; private set; }
+		public bool IsMouseOver { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
@@ -458,6 +481,7 @@ namespace Myra.Graphics2D.UI
 
 		public event EventHandler VisibleChanged;
 		public event EventHandler MeasureChanged;
+		public event EventHandler EnabledChanged;
 
 		public event EventHandler MouseLeft;
 		public event EventHandler<GenericEventArgs<Point>> MouseEntered;
