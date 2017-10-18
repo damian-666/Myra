@@ -27,7 +27,6 @@ namespace Myra.Graphics2D.UI
 		private int? _focusedWidgetIndex;
 		private Widget _modalWidget;
 		private HorizontalMenu _menuBar;
-		private readonly Dictionary<char, IMenuItem> _menuBarKeysToItems = new Dictionary<char, IMenuItem>();
 
 		public Point MousePosition { get; private set; }
 		public int MouseWheel { get; private set; }
@@ -47,20 +46,7 @@ namespace Myra.Graphics2D.UI
 					return;
 				}
 
-				_menuBarKeysToItems.Clear();
-
 				_menuBar = value;
-
-				if (_menuBar != null)
-				{
-					foreach (var item in _menuBar.Items)
-					{
-						if (item.UnderscoreChar.HasValue)
-						{
-							_menuBarKeysToItems[char.ToLower(item.UnderscoreChar.Value)] = item;
-						}
-					}
-				}
 			}
 		}
 
@@ -403,7 +389,7 @@ namespace Myra.Graphics2D.UI
 
 			var pressedKeys = KeyboardState.GetPressedKeys();
 
-			GlyphRenderOptions.DrawUnderscores = ContextMenu is Menu ||
+			GlyphRenderOptions.DrawUnderscores = (MenuBar != null && MenuBar.OpenMenuItem != null) ||
 												KeyboardState.IsKeyDown(Keys.LeftAlt) ||
 												KeyboardState.IsKeyDown(Keys.RightAlt);
 
@@ -449,16 +435,7 @@ namespace Myra.Graphics2D.UI
 
 					if (MenuBar != null && GlyphRenderOptions.DrawUnderscores)
 					{
-						var ch = key.ToChar(false);
-						if (ch.HasValue)
-						{
-							IMenuItem menuItem;
-							if (_menuBarKeysToItems.TryGetValue(ch.Value, out menuItem))
-							{
-								MenuBar.Click(menuItem);
-								FocusedWidget = MenuBar;
-							}
-						}
+						MenuBar.OnKeyDown(key);
 					}
 				}
 			}
