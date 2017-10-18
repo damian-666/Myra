@@ -82,7 +82,6 @@ namespace Myra.Graphics2D.UI
 
 		protected Menu(MenuStyle style)
 		{
-			CanFocus = true;
 			OpenMenuItem = null;
 
 			HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -402,6 +401,29 @@ namespace Myra.Graphics2D.UI
 			}
 		}
 
+		private int GetSelectedIndex()
+		{
+			int selectedIndex = -1;
+
+			if (OpenMenuItem != null)
+			{
+				selectedIndex = Widgets.IndexOf(OpenMenuItem);
+			}
+			else
+			{
+				for (var i = 0; i < Widgets.Count; ++i)
+				{
+					if (Widgets[i].IsMouseOver)
+					{
+						selectedIndex = i;
+						break;
+					}
+				}
+			}
+
+			return selectedIndex;
+		}
+
 		public override void OnKeyDown(Keys k)
 		{
 			if (!GlyphRenderOptions.DrawUnderscores)
@@ -409,12 +431,21 @@ namespace Myra.Graphics2D.UI
 				return;
 			}
 
-			var ch = k.ToChar(false);
-			if (ch == null)
+			if (k == Keys.Enter || k == Keys.Space)
 			{
-				return;
+				int selectedIndex = GetSelectedIndex();
+				if (selectedIndex != -1)
+				{
+					var button = Widgets[selectedIndex] as MenuItemButton;
+					if (button != null && !button.CanOpen)
+					{
+						Click(button);
+						return;
+					}
+				}
 			}
 
+			var ch = k.ToChar(false);
 			foreach (var w in Widgets)
 			{
 				var button = w as MenuItemButton;
@@ -423,12 +454,14 @@ namespace Myra.Graphics2D.UI
 					continue;
 				}
 
-				if (button.UnderscoreChar == ch)
+				if (ch != null && button.UnderscoreChar == ch)
 				{
 					Click(button);
 					return;
 				}
 			}
+
+
 
 			if (OpenMenuItem != null)
 			{
@@ -438,6 +471,72 @@ namespace Myra.Graphics2D.UI
 
 		public void MoveSelection(int delta)
 		{
+			if (Widgets.Count == 0)
+			{
+				return;
+			}
+
+			// First step - determine index of currently selected item
+			int selectedIndex = GetSelectedIndex();
+			var oldIndex = selectedIndex;
+
+			var iterations = 0;
+			while (true)
+			{
+				if (iterations > Widgets.Count)
+				{
+					return;
+				}
+
+				selectedIndex += delta;
+
+				if (selectedIndex < 0)
+				{
+					selectedIndex = Widgets.Count - 1;
+				}
+
+				if (selectedIndex >= Widgets.Count)
+				{
+					selectedIndex = 0;
+				}
+
+				if (Widgets[selectedIndex] is MenuItemButton)
+				{
+					break;
+				}
+
+
+				++iterations;
+			}
+
+			if (selectedIndex < 0 || selectedIndex >= Widgets.Count || selectedIndex == oldIndex)
+			{
+				return;
+			}
+
+			MenuItemButton menuItemButton;
+			if (oldIndex != -1)
+			{
+				menuItemButton = Widgets[oldIndex] as MenuItemButton;
+				if (menuItemButton != null)
+				{
+					menuItemButton.IsMouseOver = false;
+					menuItemButton.IsPressed = false;
+				}
+			}
+
+			menuItemButton = Widgets[selectedIndex] as MenuItemButton;
+			if (menuItemButton != null)
+			{
+				if (!menuItemButton.CanOpen)
+				{
+					menuItemButton.IsMouseOver = true;
+				}
+				else
+				{
+					menuItemButton.IsPressed = true;
+				}
+			}
 		}
 
 		public void ApplyMenuStyle(MenuStyle style)

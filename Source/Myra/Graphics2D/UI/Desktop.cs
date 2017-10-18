@@ -112,6 +112,7 @@ namespace Myra.Graphics2D.UI
 				if (value != null && !_widgets.Contains(value))
 				{
 					_widgets.Add(value);
+					FocusedWidget = value;
 				}
 			}
 		}
