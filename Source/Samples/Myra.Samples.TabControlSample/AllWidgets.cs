@@ -7,8 +7,6 @@ namespace Myra.Samples.TabControlSample
 {
 	public partial class AllWidgets: Grid
 	{
-		private readonly Window _window;
-
 		public AllWidgets()
 		{
 			BuildUI();
@@ -17,46 +15,34 @@ namespace Myra.Samples.TabControlSample
 			_blueButton.Image = DefaultAssets.UISpritesheet["icon-star"];
 			_imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
 
-			var label = new TextBlock
-			{
-				Text =
-					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-				VerticalSpacing = 0,
-				TextColor = Color.AntiqueWhite,
-				Wrap = true
-			};
-
-			var pane = new ScrollPane
-			{
-				Widget = label,
-				WidthHint = 200,
-				HeightHint = 200
-			};
-
-			_window = new Window
-			{
-				Title = "Text",
-				Content = pane
-			};
-
 			_button.Up += (sender, args) =>
 			{
-				_window.ShowModal(Desktop);
+				var debugWindow = new DebugOptionsDialog();
+				debugWindow.ShowModal(Desktop);
 			};
 
 			_blueButton.Up += (sender, args) =>
 			{
-				_window.ShowModal(Desktop);
+				var debugWindow = new DebugOptionsDialog();
+				debugWindow.ShowModal(Desktop);
 			};
 
 			_textButton.Up += (sender, args) =>
 			{
-				_window.ShowModal(Desktop);
+				var debugWindow = new DebugOptionsDialog();
+				debugWindow.ShowModal(Desktop);
 			};
 
 			_imageButton.Up += (sender, args) =>
 			{
-				_window.ShowModal(Desktop);
+				var debugWindow = new DebugOptionsDialog();
+				debugWindow.ShowModal(Desktop);
+			};
+
+			_menuItemAbout.Selected += (sender, args) =>
+			{
+				var messageBox = Dialog.CreateMessageBox("AllWidgets", "Myra AllWidgets Sample " + MyraEnvironment.Version);
+				messageBox.ShowModal(Desktop);
 			};
 
 			var tree = new Tree

@@ -8,7 +8,6 @@ namespace Myra.Samples.AllWidgetsSample
 		private readonly GraphicsDeviceManager _graphics;
 
 		private Desktop _host;
-		private Window _window;
 		private AllWidgets _allWidgets;
 
 		public AllWidgetsGame()
@@ -29,70 +28,9 @@ namespace Myra.Samples.AllWidgetsSample
 
 			MyraEnvironment.Game = this;
 
-			// Widget.DrawFrames = true;
 			_host = new Desktop();
 
 			_allWidgets = new AllWidgets();
-
-			_allWidgets._button.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_allWidgets._blueButton.Image = DefaultAssets.UISpritesheet["icon-star"];
-			_allWidgets._imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
-
-			var label = new TextBlock
-			{
-				Text =
-					"Lorem ipsum [Green]dolor sit amet, [Red]consectetur adipisicing elit, sed do eiusmod [#AAAAAAAA]tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. [white]Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum!",
-				VerticalSpacing = 0,
-				TextColor = Color.AntiqueWhite,
-				Wrap = true
-			};
-
-			var pane = new ScrollPane
-			{
-				Widget = label,
-				WidthHint = 200,
-				HeightHint = 200
-			};
-
-			_window = new Window
-			{
-				Title = "Text",
-				Content = pane
-			};
-
-			_allWidgets._button.Up += (sender, args) =>
-			{
-				_window.ShowModal(_host);
-			};
-
-			_allWidgets._blueButton.Up += (sender, args) =>
-			{
-				_window.ShowModal(_host);
-			};
-
-			_allWidgets._textButton.Up += (sender, args) =>
-			{
-				_window.ShowModal(_host);
-			};
-
-			_allWidgets._imageButton.Up += (sender, args) =>
-			{
-				_window.ShowModal(_host);
-			};
-
-			var tree = new Tree
-			{
-				HasRoot = false,
-				GridPositionX = 1,
-				GridPositionY = 11
-			};
-			var node1 = tree.AddSubNode("node1");
-			var node2 = node1.AddSubNode("node2");
-			var node3 = node2.AddSubNode("node3");
-			node3.AddSubNode("node4");
-			node3.AddSubNode("node5");
-			node2.AddSubNode("node6");
-			_allWidgets._gridRight.Widgets.Add(tree);
 
 			_host.Widgets.Add(_allWidgets);
 		}
