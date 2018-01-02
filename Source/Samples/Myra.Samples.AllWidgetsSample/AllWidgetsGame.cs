@@ -34,6 +34,10 @@ namespace Myra.Samples.AllWidgetsSample
 
 			_allWidgets = new AllWidgets();
 
+			_allWidgets._button.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_allWidgets._blueButton.Image = DefaultAssets.UISpritesheet["icon-star"];
+			_allWidgets._imageButton.Image = DefaultAssets.UISpritesheet["icon-star-outline"];
+
 			var label = new TextBlock
 			{
 				Text =
@@ -66,11 +70,21 @@ namespace Myra.Samples.AllWidgetsSample
 				_window.ShowModal(_host);
 			};
 
+			_allWidgets._textButton.Up += (sender, args) =>
+			{
+				_window.ShowModal(_host);
+			};
+
+			_allWidgets._imageButton.Up += (sender, args) =>
+			{
+				_window.ShowModal(_host);
+			};
+
 			var tree = new Tree
 			{
 				HasRoot = false,
 				GridPositionX = 1,
-				GridPositionY = 9
+				GridPositionY = 11
 			};
 			var node1 = tree.AddSubNode("node1");
 			var node2 = node1.AddSubNode("node2");
