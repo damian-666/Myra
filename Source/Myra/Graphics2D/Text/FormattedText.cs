@@ -2,7 +2,6 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
 using Myra.Utility;
 
 namespace Myra.Graphics2D.Text
@@ -58,7 +57,7 @@ namespace Myra.Graphics2D.Text
 			private readonly StringBuilder _fullString = new StringBuilder();
 			private GlyphRun _lastRun;
 			private readonly List<GlyphRun> _result = new List<GlyphRun>();
-			private BitmapFont _font;
+			private SpriteFont _font;
 
 			private void StoreLexeme()
 			{
@@ -79,7 +78,7 @@ namespace Myra.Graphics2D.Text
 				_fullString.Clear();
 			}
 
-			public GlyphRun[] Format(BitmapFont font, string text, Options options)
+			public GlyphRun[] Format(SpriteFont font, string text, Options options)
 			{
 				if (string.IsNullOrEmpty(text))
 				{
@@ -198,7 +197,7 @@ namespace Myra.Graphics2D.Text
 							if (options.Width.HasValue)
 							{
 								var sz = font.MeasureString(_fullString.ToString());
-								if (sz.Width <= options.Width.Value)
+								if (sz.X <= options.Width.Value)
 								{
 									_lastRun.Append(li.chars, _currentColor);
 								}
@@ -220,6 +219,7 @@ namespace Myra.Graphics2D.Text
 							{
 								_lastRun.Append(li.chars, _currentColor);
 							}
+
 							break;
 						case LexemeType.Color:
 							_currentColor = li.color;
@@ -236,7 +236,7 @@ namespace Myra.Graphics2D.Text
 			}
 		}
 
-		private BitmapFont _font;
+		private SpriteFont _font;
 		private string _text = string.Empty;
 		private int _verticalSpacing;
 		private int? _width;
@@ -247,7 +247,7 @@ namespace Myra.Graphics2D.Text
 		private bool _dirty = true;
 		private char? _underscoreChar;
 
-		public BitmapFont Font
+		public SpriteFont Font
 		{
 			get { return _font; }
 			set
@@ -325,10 +325,7 @@ namespace Myra.Graphics2D.Text
 
 		public bool IsMenuText
 		{
-			get
-			{
-				return _isMenuText;
-			}
+			get { return _isMenuText; }
 
 			set
 			{
@@ -344,10 +341,7 @@ namespace Myra.Graphics2D.Text
 
 		public char? UnderscoreChar
 		{
-			get
-			{
-				return _underscoreChar;
-			}
+			get { return _underscoreChar; }
 		}
 
 		public GlyphRun[] Strings
@@ -405,7 +399,7 @@ namespace Myra.Graphics2D.Text
 					_size.Y += _verticalSpacing;
 				}
 
-				if (_underscoreChar == null && si.UnderscoreIndex.HasValue && si.UnderscoreIndex.Value < si.Text.Length)
+				if (_underscoreChar == null && si.UnderscoreIndex.HasValue && si.UnderscoreIndex.Value < si.Count)
 				{
 					_underscoreChar = char.ToLower(si.Text[si.UnderscoreIndex.Value]);
 				}
@@ -427,11 +421,9 @@ namespace Myra.Graphics2D.Text
 
 			foreach (var si in strings)
 			{
-				si.ResetDraw();
-
 				if (y >= bounds.Top && y < bounds.Bottom)
 				{
-					si.Draw(batch, new Point(bounds.Left, y), bounds.Width, textColor);
+					si.Draw(batch, new Point(bounds.Left, y), textColor);
 				}
 
 				y += si.Size.Y;
@@ -449,7 +441,7 @@ namespace Myra.Graphics2D.Text
 			_dirty = true;
 		}
 
-		public GlyphRender Hit(Point pos)
+/*		public GlyphRender Hit(Point pos)
 		{
 			var strings = Strings;
 
@@ -469,8 +461,8 @@ namespace Myra.Graphics2D.Text
 				}
 
 				if (pos.Y >= si.RenderedBounds.Value.Top &&
-					pos.Y < si.RenderedBounds.Value.Bottom &&
-					si.GlyphRenders.Count > 0)
+				    pos.Y < si.RenderedBounds.Value.Bottom &&
+				    si.GlyphRenders.Count > 0)
 				{
 					// If position fits into the entire line, use the last glyph as result
 					return si.GlyphRenders[si.GlyphRenders.Count - 1];
@@ -495,6 +487,32 @@ namespace Myra.Graphics2D.Text
 					}
 
 					++ch;
+				}
+			}
+
+			return null;
+		}
+
+		public GlyphRender GetGlyphRenderByIndex(int charIndex)
+		{
+			if (Text != null && charIndex >= Text.Length)
+			{
+				charIndex = Text.Length - 1;
+			}
+
+			var strings = Strings;
+
+			var i = 0;
+			foreach (var si in strings)
+			{
+				foreach (var gr in si.GlyphRenders)
+				{
+					if (charIndex == i)
+					{
+						return gr;
+					}
+
+					++i;
 				}
 			}
 
@@ -559,33 +577,7 @@ namespace Myra.Graphics2D.Text
 			}
 
 			return null;
-		}
-
-		public GlyphRender GetGlyphRenderByIndex(int charIndex)
-		{
-			if (Text != null && charIndex >= Text.Length)
-			{
-				charIndex = Text.Length - 1;
-			}
-
-			var strings = Strings;
-
-			var i = 0;
-			foreach (var si in strings)
-			{
-				foreach (var gr in si.GlyphRenders)
-				{
-					if (charIndex == i)
-					{
-						return gr;
-					}
-
-					++i;
-				}
-			}
-
-			return null;
-		}
+		}*/
 
 		public FormattedText Clone()
 		{

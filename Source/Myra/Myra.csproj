@@ -36,9 +36,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
-      <HintPath>..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>..\Myra-Dependencies\MonoGame.Framework.Portable\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -51,12 +48,6 @@
     <Compile Include="Attributes\HiddenInEditorAttribute.cs" />
     <Compile Include="Attributes\IItemsProvider.cs" />
     <Compile Include="Attributes\SelectionAttribute.cs" />
-    <Compile Include="Content\BitmapFonts\BitmapFontReader.cs" />
-    <Compile Include="Content\Stylesheets\StylesheetReader.cs" />
-    <Compile Include="Content\TextureAtlases\TextureAtlasContent.cs" />
-    <Compile Include="Content\TextureAtlases\TextureAtlasContentLoader.cs" />
-    <Compile Include="Content\TextureAtlases\TextureAtlasReader.cs" />
-    <Compile Include="Content\TextureAtlases\TextureAtlasRegionContent.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFont.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\BitmapFontLoader.cs" />
     <Compile Include="Cyotek.Drawing.BitmapFont\Character.cs" />
@@ -69,6 +60,10 @@
     <Compile Include="Graphics2D\StbSharp\PinnedArray.cs" />
     <Compile Include="Graphics2D\StbSharp\Stb.Image.cs" />
     <Compile Include="Graphics2D\StbSharp\Stb.Image.Generated.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\NinePatchRegion.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\TextureAtlas.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\TextureAtlas.GDX.cs" />
+    <Compile Include="Graphics2D\TextureAtlases\TextureRegion.cs" />
     <Compile Include="Graphics2D\Text\BitmapFontHelper.cs" />
     <Compile Include="Graphics2D\UI\HorizontalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\GridBased.cs" />
@@ -82,7 +77,6 @@
     <Compile Include="Graphics2D\PaddingInfo.cs" />
     <Compile Include="Graphics2D\Text\CharInfo.cs" />
     <Compile Include="Graphics2D\Text\FormattedText.cs" />
-    <Compile Include="Graphics2D\Text\GlyphRender.cs" />
     <Compile Include="Graphics2D\Text\GlyphRun.cs" />
     <Compile Include="Graphics2D\UI\CheckBox.cs" />
     <Compile Include="Graphics2D\UI\ComboBox.cs" />
@@ -134,6 +128,7 @@
     <Compile Include="Graphics2D\UI\VerticalProgressBar.cs" />
     <Compile Include="Graphics2D\UI\VerticalSlider.cs" />
     <Compile Include="Graphics2D\UI\VerticalSplitPane.cs" />
+    <Compile Include="ShapeExtensions.cs" />
     <Compile Include="Utility\Input.cs" />
     <Compile Include="Utility\ProgressInfo.cs" />
     <Compile Include="DefaultAssets.cs" />

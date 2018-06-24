@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
 using Myra.Attributes;
 using Myra.Graphics2D.Text;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 using Newtonsoft.Json;
@@ -43,7 +43,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public BitmapFont Font
+		public SpriteFont Font
 		{
 			get { return _formattedText.Font; }
 			set
@@ -56,7 +56,7 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public BitmapFont MessageFont { get; set; }
+		public SpriteFont MessageFont { get; set; }
 
 		[EditCategory("Appearance")]
 		[DefaultValue(true)]
@@ -91,12 +91,12 @@ namespace Myra.Graphics2D.UI
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Cursor { get; set; }
+		public TextureRegion Cursor { get; set; }
 
 		[HiddenInEditor]
 		[JsonIgnore]
 		[EditCategory("Appearance")]
-		public TextureRegion2D Selection { get; set; }
+		public TextureRegion Selection { get; set; }
 
 		[EditCategory("Behavior")]
 		[DefaultValue(450)]
@@ -264,7 +264,7 @@ namespace Myra.Graphics2D.UI
 					}
 					break;
 
-				case Keys.Up:
+/*				case Keys.Up:
 				{
 					if (!Multiline)
 					{
@@ -325,7 +325,7 @@ namespace Myra.Graphics2D.UI
 					var pos = _formattedText.GetCharIndexByPosition(lineIndex, glyphIndex);
 					_cursorIndex = pos ?? 0;
 				}
-					break;
+					break;*/
 
 				case Keys.Home:
 					_cursorIndex = 0;
@@ -372,7 +372,7 @@ namespace Myra.Graphics2D.UI
 		{
 			base.OnMouseDown(mb);
 
-			var mousePos = Desktop.MousePosition;
+/*			var mousePos = Desktop.MousePosition;
 			var glyphRender = _formattedText.Hit(mousePos);
 			if (glyphRender == null)
 			{
@@ -392,7 +392,7 @@ namespace Myra.Graphics2D.UI
 				{
 					_cursorIndex = _cursorIndex + 1;
 				}
-			}
+			}*/
 		}
 
 		public override void InternalRender(RenderContext context)
@@ -418,7 +418,7 @@ namespace Myra.Graphics2D.UI
 				_lastBlinkStamp = now;
 			}
 
-			if (_cursorOn && Cursor != null)
+			/*if (_cursorOn && Cursor != null)
 			{
 				var x = bounds.X;
 				var y = bounds.Y;
@@ -433,9 +433,9 @@ namespace Myra.Graphics2D.UI
 
 				context.Batch.Draw(Cursor, new Rectangle(x,
 					y,
-					(int) Cursor.Size.Width,
-					_formattedText.Font.LineHeight));
-			}
+					Cursor.Bounds.Width,
+					_formattedText.Font.LineSpacing));
+			}*/
 		}
 
 		protected override Point InternalMeasure(Point availableSize)
@@ -460,9 +460,9 @@ namespace Myra.Graphics2D.UI
 				result = formattedText.Size;
 			}
 
-			if (result.Y < Font.LineHeight)
+			if (result.Y < Font.LineSpacing)
 			{
-				result.Y = Font.LineHeight;
+				result.Y = Font.LineSpacing;
 			}
 
 			return result;

@@ -1,11 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.BitmapFonts;
-using MonoGame.Extended.TextureAtlases;
-using Myra.Content.TextureAtlases;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Text;
+using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI.Styles;
 using Myra.Utility;
 
@@ -22,14 +20,14 @@ namespace Myra
 			typeof(DefaultAssets).GetTypeInfo().Assembly,
 			"Myra.Resources.");
 
-		private static BitmapFont _font;
-		private static BitmapFont _fontSmall;
+		private static SpriteFont _font;
+		private static SpriteFont _fontSmall;
 		private static TextureAtlas _uiSpritesheet;
 		private static Stylesheet _uiStylesheet;
 		private static Texture2D _uiBitmap;
 		private static RasterizerState _uiRasterizerState;
 		private static Texture2D _white;
-		private static TextureRegion2D _whiteRegion;
+		private static TextureRegion _whiteRegion;
 
 		public static Texture2D White
 		{
@@ -45,20 +43,20 @@ namespace Myra
 			}
 		}
 
-		public static TextureRegion2D WhiteRegion
+		public static TextureRegion WhiteRegion
 		{
 			get
 			{
 				if (_whiteRegion == null)
 				{
-					_whiteRegion = new TextureRegion2D(White);
+					_whiteRegion = new TextureRegion(White);
 				}
 
 				return _whiteRegion;
 			}
 		}
 
-		public static BitmapFont Font
+		public static SpriteFont Font
 		{
 			get
 			{
@@ -67,15 +65,14 @@ namespace Myra
 					return _font;
 				}
 
-				_font = BitmapFontHelper.LoadFromFnt(DefaultFontName,
-					_assetResolver.ReadAsString(DefaultFontName),
-					s => UISpritesheet.GetRegion("default"));
+				_font = SpriteFontHelper.LoadFromFnt(_assetResolver.ReadAsString(DefaultFontName),
+					UISpritesheet.Drawables["default"]);
 
 				return _font;
 			}
 		}
 
-		public static BitmapFont FontSmall
+		public static SpriteFont FontSmall
 		{
 			get
 			{
@@ -84,9 +81,9 @@ namespace Myra
 					return _fontSmall;
 				}
 
-				_fontSmall = BitmapFontHelper.LoadFromFnt(DefaultSmallFontName,
+				_fontSmall = SpriteFontHelper.LoadFromFnt(
 					_assetResolver.ReadAsString(DefaultSmallFontName),
-					s => UISpritesheet.GetRegion("font-small"));
+					UISpritesheet.Drawables["font-small"]);
 
 				return _fontSmall;
 			}
@@ -98,10 +95,7 @@ namespace Myra
 			{
 				if (_uiSpritesheet != null) return _uiSpritesheet;
 
-				var content =
-					TextureAtlasContentLoader.Load(_assetResolver.ReadAsString(DefaultSpritesheetName));
-
-				_uiSpritesheet = content.Create(UIBitmap);
+				_uiSpritesheet = TextureAtlas.Load(_assetResolver.ReadAsString(DefaultSpritesheetName), s => UIBitmap);
 				
 				return _uiSpritesheet;
 			}
@@ -117,7 +111,7 @@ namespace Myra
 				}
 
 				_uiStylesheet = Stylesheet.CreateFromSource(_assetResolver.ReadAsString(DefaultStylesheetName),
-					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.GetRegion(s),
+					s => string.IsNullOrEmpty(s) ? null : UISpritesheet.Drawables[s],
 					f => f == "default-font" ? Font : FontSmall);
 
 				return _uiStylesheet;

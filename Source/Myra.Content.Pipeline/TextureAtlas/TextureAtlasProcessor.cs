@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using Myra.Content.TextureAtlases;
 using Myra.Graphics2D;
 
 namespace Myra.Content.Pipeline.TextureAtlas

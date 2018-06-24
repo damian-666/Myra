@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Myra.Content.TextureAtlases;
 using Myra.Graphics2D;
+using Myra.Graphics2D.TextureAtlases;
 
 namespace Myra.Content.Pipeline.TextureAtlas
 {

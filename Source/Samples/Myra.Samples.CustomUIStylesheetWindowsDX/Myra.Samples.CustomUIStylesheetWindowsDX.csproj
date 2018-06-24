@@ -49,9 +49,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MonoGame.Extended">
-      <HintPath>..\..\Myra-Dependencies\MonoGame.Extended\MonoGame.Extended.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Myra-Dependencies\MonoGame.Framework.WindowsDX\MonoGame.Framework.dll</HintPath>
